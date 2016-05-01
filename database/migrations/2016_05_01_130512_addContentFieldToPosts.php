@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryTable extends Migration
+class AddContentFieldToPosts extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,8 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('Category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('category_name', 15)->unique();
+        Schema::table('Posts', function (Blueprint $table) {
+            $table->mediumText('postContent');
         });
     }
 
@@ -25,6 +24,8 @@ class CreateCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::drop('Category');
+        Schema::table('Posts', function (Blueprint $table) {
+            //
+        });
     }
 }
