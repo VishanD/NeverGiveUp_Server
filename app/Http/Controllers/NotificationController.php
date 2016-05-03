@@ -40,6 +40,35 @@ class NotificationController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexUnread($user_id)
+    {
+        $all_notifications = array();
+
+        $all_notification_ids_for_this_user = newNotification::where('user_id', $user_id)
+            ->where('read_status', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        foreach($all_notification_ids_for_this_user as $this_id) {
+
+            $notification = notification::find($this_id->notification_id);
+            array_push($all_notifications, $notification->message);
+        }
+
+        return response()->json([
+                'status' => 'success',
+                'data' => $all_notifications
+            ]
+        )->setStatusCode(200);
+
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

@@ -69,6 +69,7 @@ Route::get('get_single_link/{type}', 'LiftMeUpController@index');
 //------------------Notifications Routes-------------//
 //--------------------------------------------------//
 Route::get('get_all_notifications/{user_id}', 'NotificationController@index');
+Route::get('get_unread_notifications/{user_id}', 'NotificationController@indexUnread');
 //Before passing messages to the route below, always replace the <space> with "_"
 // It will automatically parse it to correct format.
 // This is done to avoid complications with URLs
