@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\app_users;
 use Illuminate\Http\Request;
 use App\posts;
 
@@ -18,7 +19,9 @@ class PostController extends Controller
     public function index($category)
     {
         $all_posts = posts::where('category', $category)
-            ->orderBy('created_at', 'desc')
+            ->join('app_users','Posts.user_id','=','app_users.id')
+            ->orderBy('Posts.created_at', 'desc')
+            ->select('app_users.name','app_users.fb_profile_id','Posts.id','Posts.upvotes','Posts.downvotes','Posts.user_id','Posts.category','Posts.postContent')
             ->get();
 
         return response()->json([
@@ -39,9 +42,14 @@ class PostController extends Controller
 
         $post = new posts();
 
-        $post->upvotes = $data['upvotes'];
-        $post->downvotes = $data['downvotes'];
-        $post->user_id = $data['user_id'];
+        $user_id = app_users::where('fb_profile_id','=',$data['fb_profile_id'])
+                            ->first();
+
+
+
+        $post->upvotes = (int)$data['upvotes'];
+        $post->downvotes = (int)$data['downvotes'];
+        $post->user_id = $user_id->id;
         $post->category = $data['category'];
         $post->postContent = $data['postContent'];
 
@@ -138,6 +146,66 @@ class PostController extends Controller
         else {
 
             $post->delete();
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $post
+                ]
+            )->setStatusCode(200);
+        }
+    }
+
+    public function upvote($id,Request $request)
+    {
+        $data = $request->all();
+
+        $post = posts::find($id);
+
+
+        if ($post == null) {
+            return response()->json([
+                    'status' => 'fail',
+                    'data' => $post
+                ]
+            )->setStatusCode(404);
+        }
+
+        else {
+
+            $post->upvotes = $post->upvotes + $data['upvotes'];
+            $post->save();
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $post
+                ]
+            )->setStatusCode(200);
+        }
+
+    }
+
+    public function downvote($id,Request $request)
+    {
+        $data = $request->all();
+
+        $post = posts::find($id);
+
+
+        if ($post == null) {
+            return response()->json([
+                    'status' => 'fail',
+                    'data' => $post
+                ]
+            )->setStatusCode(404);
+        }
+
+        else {
+
+            //this is ok
+            $post->downvotes = $post->downvotes + $data['upvotes'];
+            $post->save();
 
             return response()->json(
                 [

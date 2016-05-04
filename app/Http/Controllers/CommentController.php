@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\app_users;
 use Illuminate\Http\Request;
 use App\comments;
 
@@ -18,8 +19,12 @@ class CommentController extends Controller
     public function index($post_id)
     {
         $comments = comments::where('pid', $post_id)
-            ->orderBy('created_at')
+            ->join('app_users','Comments.user_id','=','app_users.id')
+            ->orderBy('Comments.created_at')
+            ->select('app_users.name','app_users.fb_profile_id','Comments.id','Comments.comment_text','Comments.pid','Comments.user_id')
             ->get();
+
+
 
         return response()->json([
                 'status' => 'success',
@@ -37,11 +42,14 @@ class CommentController extends Controller
     {
         $data = $request->all();
 
+        $user_id = app_users::where('fb_profile_id','=',$data['fb_profile_id'])
+            ->first();
+
         $comment = new comments();
 
         $comment->comment_text = $data['comment_text'];
         $comment->pid = $data['pid'];
-        $comment->user_id = $data['user_id'];
+        $comment->user_id = $user_id->id;
         $comment->save();
 
         return response()->json([

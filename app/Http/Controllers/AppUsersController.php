@@ -20,18 +20,21 @@ class AppUsersController extends Controller
     public function create(Request $request)
     {
         $data = $request->all();
-        $image = $request->file('profile_picture');
-        $path = public_path()."/profile_pics/";
+
+        //this line is no needed since the profile picture is generated using fb
+     /*   $image = $request->file('profile_picture');
+        $path = public_path()."/profile_pics/";*/
 
         $user = new app_users();
 
-        $image->move($path, $data['email']."jpg");
+      //  $image->move($path, $data['email']."jpg");  $path.$data['email'].".jpg"
 
 
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->date_of_birth = $data['date_of_birth'];
-        $user->profile_picture = $path.$data['email'].".jpg";
+        $user->profile_picture = $data['fb_profile_id'];
+        $user->fb_profile_id = $data['fb_profile_id'];
         $user->save();
 
         return response()->json([

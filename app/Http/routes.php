@@ -31,6 +31,8 @@ Route::get('get_single_post/{id}', 'PostController@show');
 Route::post('create_single_post', 'PostController@create');
 Route::post('edit_single_post/{id}', 'PostController@edit');
 Route::delete('delete_single_post/{id}', 'PostController@destroy');
+Route::post('upvote_post/{id}','PostController@upvote');
+Route::post('downvote_post/{id}','PostController@downvote');
 //----------------------------------------------------//
 
 

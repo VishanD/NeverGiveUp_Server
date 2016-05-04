@@ -14,6 +14,7 @@ class app_users extends Model
         'date_of_birth',
         'password',
         'profile_picture',
+        'fb_profile_id',
     ];
 
     /*protected $hidden = [
