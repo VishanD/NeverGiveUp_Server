@@ -215,4 +215,64 @@ class PostController extends Controller
             )->setStatusCode(200);
         }
     }
+
+    public function upvote_deduct($id,Request $request)
+    {
+        $data = $request->all();
+
+        $post = posts::find($id);
+
+
+        if ($post == null) {
+            return response()->json([
+                    'status' => 'fail',
+                    'data' => $post
+                ]
+            )->setStatusCode(404);
+        }
+
+        else {
+
+            $post->upvotes = $post->upvotes - $data['upvotes'];
+            $post->save();
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $post
+                ]
+            )->setStatusCode(200);
+        }
+
+    }
+
+    public function downvote_deduct($id,Request $request)
+    {
+        $data = $request->all();
+
+        $post = posts::find($id);
+
+
+        if ($post == null) {
+            return response()->json([
+                    'status' => 'fail',
+                    'data' => $post
+                ]
+            )->setStatusCode(404);
+        }
+
+        else {
+
+            //this is ok
+            $post->downvotes = $post->downvotes - $data['upvotes'];
+            $post->save();
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $post
+                ]
+            )->setStatusCode(200);
+        }
+    }
 }

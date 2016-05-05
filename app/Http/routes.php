@@ -33,6 +33,8 @@ Route::post('edit_single_post/{id}', 'PostController@edit');
 Route::delete('delete_single_post/{id}', 'PostController@destroy');
 Route::post('upvote_post/{id}','PostController@upvote');
 Route::post('downvote_post/{id}','PostController@downvote');
+Route::post('upvote_post_deduct/{id}','PostController@upvote_deduct');
+Route::post('downvote_post_deduct/{id}','PostController@downvote_deduct');
 //----------------------------------------------------//
 
 
@@ -57,6 +59,8 @@ Route::get('get_all_awards', 'AwardsController@index');
 //------------------Categories Routes----------------//
 //--------------------------------------------------//
 Route::get('get_all_categories', 'CategoryController@index');
+Route::get('subscribe_category/{user_id}/{category}','CategoryController@subscribe');
+Route::get('unsubscribe_category/{user_id}/{category}','CategoryController@unsubscribe');
 //----------------------------------------------------//
 
 
