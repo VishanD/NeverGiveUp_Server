@@ -61,7 +61,20 @@ Route::get('get_all_categories', 'CategoryController@index');
 
 
 //----------------------------------------------------//
-//------------------LiftMeUp Routes----------------//
+//------------------LiftMeUp Routes------------------//
 //--------------------------------------------------//
 Route::get('get_single_link/{type}', 'LiftMeUpController@index');
+//----------------------------------------------------//
+
+
+//----------------------------------------------------//
+//------------------Notifications Routes-------------//
+//--------------------------------------------------//
+Route::get('get_all_notifications/{user_id}', 'NotificationController@index');
+Route::get('get_unread_notifications/{user_id}', 'NotificationController@indexUnread');
+//Before passing messages to the route below, always replace the <space> with "_"
+// It will automatically parse it to correct format.
+// This is done to avoid complications with URLs
+Route::get('create_new_notification/{category}/{message}', 'NotificationController@create');
+Route::get('mark_read_notifications/{user_id}', 'NotificationController@edit');
 //----------------------------------------------------//
