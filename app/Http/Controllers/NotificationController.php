@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\app_users;
 use Illuminate\Http\Request;
 use App\notification;
 use App\newNotification;
@@ -19,9 +20,23 @@ class NotificationController extends Controller
      */
     public function index($user_id)
     {
+        //get the user id from the fb id, only fb id is send from the mobile app
+        $user_id_app = app_users::where('fb_profile_id','=',$user_id)
+            ->first();
+
+        if(empty($user_id_app))
+        {
+            $id = "2";
+        }
+        else{
+
+            $id = $user_id_app->id;
+        }
+
+
         $all_notifications = array();
 
-        $all_notification_ids_for_this_user = newNotification::where('user_id', $user_id)
+        $all_notification_ids_for_this_user = newNotification::where('user_id', $id)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -46,9 +61,22 @@ class NotificationController extends Controller
      */
     public function indexUnread($user_id)
     {
+        //get the user id from the fb id, only fb id is send from the mobile app
+        $user_id_app = app_users::where('fb_profile_id','=',$user_id)
+            ->first();
+
+        if(empty($user_id_app))
+        {
+            $id = "2";
+        }
+        else{
+
+            $id = $user_id_app->id;
+        }
+
         $all_notifications = array();
 
-        $all_notification_ids_for_this_user = newNotification::where('user_id', $user_id)
+        $all_notification_ids_for_this_user = newNotification::where('user_id', $id)
             ->where('read_status', 0)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -111,7 +139,20 @@ class NotificationController extends Controller
     public function edit($user_id)
     {
 
-        $all_notification_ids_for_this_user = newNotification::where('user_id', $user_id)
+        //get the user id from the fb id, only fb id is send from the mobile app
+        $user_id_app = app_users::where('fb_profile_id','=',$user_id)
+            ->first();
+
+        if(empty($user_id_app))
+        {
+            $id = "2";
+        }
+        else{
+
+            $id = $user_id_app->id;
+        }
+
+        $all_notification_ids_for_this_user = newNotification::where('user_id', $id)
             ->get();
 
         foreach($all_notification_ids_for_this_user as $this_id) {
